@@ -1,6 +1,6 @@
 export const SIGN_IN_TEXTS = {
-  title: 'Welcome Back! 👋',
-  subtitle: 'Sign in to continue chatting with Bobo AI',
+  title: 'Login',
+  subtitle: 'Sign in to continue chatting with Lumi AI',
   emailPlaceholder: 'Email',
   passwordPlaceholder: 'Password',
   rememberMeLabel: 'Remember me',

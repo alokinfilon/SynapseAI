@@ -7,7 +7,8 @@ export interface Splash2ScreenProps {
   onFinishLoading?: () => void;
 }
 
-export const useSplash2 = ({ onFinishLoading }: Splash2ScreenProps) => {
+export const useSplash2 = (props: Splash2ScreenProps) => {
+  const { onNext, onFinishLoading } = props;
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -17,13 +18,14 @@ export const useSplash2 = ({ onFinishLoading }: Splash2ScreenProps) => {
       useNativeDriver: true,
     }).start();
 
-    if (onFinishLoading) {
+    const callback = onNext || onFinishLoading;
+    if (callback) {
       const timer = setTimeout(() => {
-        onFinishLoading();
+        callback();
       }, LOADING_TIMEOUT);
       return () => clearTimeout(timer);
     }
-  }, [fadeAnim, onFinishLoading]);
+  }, [fadeAnim, onNext, onFinishLoading]);
 
   return {
     fadeAnim,

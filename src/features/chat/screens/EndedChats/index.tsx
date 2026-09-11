@@ -1,13 +1,14 @@
 import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ChatCard, ConfirmationModal } from '../../../../shared/components';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LeftArrowIcon, MoreIcon, SearchIcon } from '../../../../../assets/svg';
+import { ChatCard, ConfirmationModal, HeaderBar, Input } from '../../../../shared/components';
 import { ENDED_CHATS_TEXTS } from './constants';
 import { styles } from './styles';
 import { useEndedChats, UseEndedChatsProps } from './useEndedChats';
@@ -21,6 +22,9 @@ export const EndedChatsScreen: React.FC<EndedChatsScreenProps> = (props) => {
     deletingChatId,
     setDeletingChatId,
     handleDeleteConfirm,
+    searchQuery,
+    setSearchQuery,
+    isSearchVisible,
     onBack,
     onSelectChat,
     onSearchPress,
@@ -31,26 +35,41 @@ export const EndedChatsScreen: React.FC<EndedChatsScreenProps> = (props) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
       <StatusBar barStyle={theme.isDarkMode ? 'light-content' : 'dark-content'} />
 
-      {/* Header Navigation */}
-      <View style={styles.headerNav}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
-            <Text style={[styles.backArrow, { color: theme.colors.textPrimary }]}>←</Text>
-          </TouchableOpacity>
-          <Text style={[styles.headerTitle, theme.typography.displayLg, { color: theme.colors.textPrimary }]}>
-            {ENDED_CHATS_TEXTS.headerTitle}
-          </Text>
-        </View>
+      {/* Shared Header */}
+      <HeaderBar
+        leftComponent={
+          <>
+            <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
+              <LeftArrowIcon size={24} color={theme.colors.textPrimary} />
+            </TouchableOpacity>
+            <Text style={[styles.headerTitle, { color: theme.colors.textPrimary }]}>
+              {ENDED_CHATS_TEXTS.headerTitle}
+            </Text>
+          </>
+        }
+        rightActions={
+          <>
+            <TouchableOpacity onPress={onSearchPress} activeOpacity={0.7}>
+              <SearchIcon size={19} color={theme.colors.textPrimary} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onMorePress} activeOpacity={0.7}>
+              <MoreIcon size={22} color={theme.colors.textPrimary} />
+            </TouchableOpacity>
+          </>
+        }
+      />
 
-        <View style={styles.headerRight}>
-          <TouchableOpacity onPress={onSearchPress} activeOpacity={0.7}>
-            <Text style={[styles.headerIcon, { color: theme.colors.textPrimary }]}>🔍</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onMorePress} activeOpacity={0.7}>
-            <Text style={[styles.headerIcon, { color: theme.colors.textPrimary }]}>⋯</Text>
-          </TouchableOpacity>
+      {/* Search Input Bar */}
+      {isSearchVisible && (
+        <View style={styles.searchBarContainer}>
+          <Input
+            placeholder="Search ended chats..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            leftIcon={<SearchIcon size={19} color={theme.colors.textMuted} />}
+          />
         </View>
-      </View>
+      )}
 
       {/* Delete Chat Confirmation Modal */}
       <ConfirmationModal

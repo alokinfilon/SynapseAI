@@ -5,7 +5,7 @@ export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   ForgotPasswordMethods: undefined;
-  OTPVerification: { method: ResetMethod };
+  OTPVerification: { method: ResetMethod; contact?: string };
   CreateNewPassword: undefined;
   FillProfile: undefined;
 };

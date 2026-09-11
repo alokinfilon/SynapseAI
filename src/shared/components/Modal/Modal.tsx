@@ -1,5 +1,13 @@
 import React from 'react';
-import { Modal as RNModal, ModalProps as RNModalProps, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Modal as RNModal,
+  ModalProps as RNModalProps,
+  Platform,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { useTheme } from '../../../hooks';
 
 export interface ModalProps extends RNModalProps {
@@ -15,11 +23,15 @@ export const Modal: React.FC<ModalProps> = ({ visible, onClose, children, ...res
     <RNModal visible={visible} transparent animationType="fade" onRequestClose={onClose} {...rest}>
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.overlay}>
-          <TouchableWithoutFeedback>
-            <View style={[styles.card, { backgroundColor: theme.colors.canvas }]}>
-              {children}
-            </View>
-          </TouchableWithoutFeedback>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={styles.keyboardView}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.card, { backgroundColor: theme.colors.canvas }]}>
+                {children}
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
         </View>
       </TouchableWithoutFeedback>
     </RNModal>
@@ -34,10 +46,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
   },
+  keyboardView: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   card: {
     width: '100%',
-    borderRadius: 24,
-    padding: 20,
+    borderRadius: 32,
+    padding: 24,
   },
 });
 

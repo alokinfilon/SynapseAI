@@ -33,6 +33,14 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Synapse needs microphone access to transcribe your voice into chat messages.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Synapse uses speech recognition to convert your voice to text for chat input.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Synapse needs camera access to capture real photos for chat.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Synapse needs photo library access to upload images to chat.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
 	<key>UILaunchStoryboardName</key>

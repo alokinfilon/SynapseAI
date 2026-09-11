@@ -5,37 +5,22 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerNav: {
-    height: 56,
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  /* ===== Header child styles ===== */
   backButton: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     justifyContent: 'center',
     marginRight: 8,
   },
-  backArrow: {
-    fontSize: 28,
-  },
   headerTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontFamily: fonts.bold,
+    fontWeight: '800',
   },
-  headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  headerIcon: {
-    fontSize: 22,
+  searchBarContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 4,
   },
   scrollContent: {
     paddingHorizontal: 20,

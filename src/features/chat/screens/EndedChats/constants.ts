@@ -19,33 +19,33 @@ export const ENDED_CHATS_TEXTS = {
 export const INITIAL_ENDED_CHATS: EndedChatItem[] = [
   {
     id: '1',
-    title: 'Bobo - Dec 19, 2024',
+    title: 'Lumi ',
     subtitle: "I'm good too, I'm reading a book right now 😁😁",
     expression: 'heart',
   },
   {
     id: '2',
-    title: 'Bobo - Dec 18, 2024',
-    subtitle: 'Bobo is very sad today because of an accident',
+    title: 'Lumi ',
+    subtitle: 'Lumi is very sad today because of an accident',
     expression: 'sad',
     isSwiped: true,
   },
   {
     id: '3',
-    title: 'Bobo - Dec 18, 2024',
+    title: 'Lumi ',
     subtitle: "Hi, how are you today? I'm ready to accompany your day!",
     expression: 'star',
   },
   {
     id: '4',
-    title: 'Bobo - Dec 16, 2024',
-    subtitle: 'Bobo is learning camera, do you want to learn with me? 🧐',
+    title: 'Lumi ',
+    subtitle: 'Lumi is learning camera, do you want to learn with me? 🧐',
     expression: 'smile',
   },
   {
     id: '5',
-    title: 'Bobo - Dec 15, 2024',
-    subtitle: 'Hi Andrew! Bobo is here! Bobo is very tired today.',
+    title: 'Lumi ',
+    subtitle: 'Hi Andrew! Lumi is here! Lumi is very tired today.',
     expression: 'smile',
   },
 ];

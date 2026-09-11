@@ -33,7 +33,7 @@ export const Input: React.FC<InputProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const activeTealColor = theme.colors.primary || '#00D2B4';
+  const activeTealColor = theme.colors.primary || '#10D0A7';
 
   const getBorderColor = () => {
     if (error) {
@@ -42,10 +42,13 @@ export const Input: React.FC<InputProps> = ({
     if (isFocused) {
       return activeTealColor;
     }
-    return theme.isDarkMode ? '#35383F' : '#E8ECF4';
+    return theme.isDarkMode ? '#262A34' : '#F5F6F8';
   };
 
   const getBackgroundColor = () => {
+    if (isFocused) {
+      return theme.isDarkMode ? 'rgba(16, 208, 167, 0.08)' : 'rgba(16, 208, 167, 0.06)';
+    }
     return theme.isDarkMode ? '#1F222A' : '#FAFAFA';
   };
 
@@ -163,6 +166,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     paddingVertical: 0,
+    textAlignVertical: 'center',
   },
   errorText: {
     fontSize: 12,

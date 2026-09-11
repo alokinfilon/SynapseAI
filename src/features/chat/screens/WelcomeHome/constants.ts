@@ -1,9 +1,8 @@
 export const WELCOME_HOME_TEXTS = {
-  greetingPrefix: 'Welcome, ',
-  greetingSuffix: ' 👋',
-  questionTitle: 'How can I help you today?',
-  questionSubtitle: 'Ask me anything or start a new conversation.',
-  startButton: 'Start New Chat',
-  editAction: 'Edit',
-  moreAction: '•••',
+  welcomePrefix: 'Welcome, ',
+  welcomeSuffix: ' 👋',
+  funHeading: "Let's Have Fun with Lumi!",
+  questionSubtitle: 'Start a conversation with Lumi right now!',
+  startButton: 'Start Chat with Lumi',
+  brandName: 'Lumi',
 };

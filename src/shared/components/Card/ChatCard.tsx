@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { DeleteIcon, MessageIcon } from '../../../../assets/svg';
+import { DeleteIcon, EditIcon, MessageIcon } from '../../../../assets/svg';
 import { useTheme } from '../../../hooks';
 import { RobotAvatar, RobotExpression } from '../Icon';
 
@@ -13,6 +13,7 @@ export interface ChatCardProps {
   time?: string;
   unreadCount?: number;
   onPress?: () => void;
+  onLongPress?: (e?: any) => void;
   onDeletePress?: () => void;
   style?: ViewStyle;
 }
@@ -24,26 +25,13 @@ export const ChatCard: React.FC<ChatCardProps> = ({
   isActive = false,
   isSwiped = false,
   time,
+  unreadCount,
   onPress,
+  onLongPress,
   onDeletePress,
   style,
 }) => {
   const theme = useTheme();
-
-  // Helper for expression background tint
-  const getExpressionBg = () => {
-    switch (expression) {
-      case 'heart':
-        return theme.isDarkMode ? 'rgba(255, 105, 180, 0.15)' : 'rgba(255, 105, 180, 0.1)';
-      case 'sad':
-        return theme.isDarkMode ? 'rgba(99, 102, 241, 0.18)' : 'rgba(99, 102, 241, 0.1)';
-      case 'star':
-        return theme.isDarkMode ? 'rgba(245, 158, 11, 0.18)' : 'rgba(245, 158, 11, 0.1)';
-      case 'smile':
-      default:
-        return theme.isDarkMode ? 'rgba(0, 210, 180, 0.15)' : 'rgba(0, 210, 180, 0.1)';
-    }
-  };
 
   return (
     <View style={styles.outerWrapper}>
@@ -56,18 +44,19 @@ export const ChatCard: React.FC<ChatCardProps> = ({
               : (theme.isDarkMode ? '#1F222A' : '#FFFFFF'),
             borderColor: isActive
               ? theme.colors.primary
-              : (theme.isDarkMode ? '#35383F' : '#E8ECF4'),
-            borderRadius: theme.radius.card,
+              : (theme.isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'),
+            borderRadius: theme.radius.card || 20,
           },
           theme.shadows.sm,
           style,
         ]}
         onPress={onPress}
-        activeOpacity={0.85}>
+        onLongPress={(e) => onLongPress?.(e)}
+        activeOpacity={0.88}>
         {/* Avatar Badge */}
         <View style={styles.avatarContainer}>
           <RobotAvatar
-            size={42}
+            size={58}
             expression={expression}
             showParticles={false}
             glowColor={isActive ? theme.colors.primary : undefined}
@@ -85,7 +74,7 @@ export const ChatCard: React.FC<ChatCardProps> = ({
               style={[
                 styles.title,
                 theme.typography.headingSm,
-                { color: theme.colors.textPrimary, fontSize: 14 },
+                { color: theme.colors.textPrimary, fontSize: 15, fontWeight: '700' },
               ]}>
               {title}
             </Text>
@@ -94,7 +83,7 @@ export const ChatCard: React.FC<ChatCardProps> = ({
                 style={[
                   styles.timeText,
                   theme.typography.bodySm,
-                  { color: theme.colors.textMuted, fontSize: 11 },
+                  { color: theme.colors.textMuted, fontSize: 11, fontWeight: '500' },
                 ]}>
                 {time}
               </Text>
@@ -106,7 +95,7 @@ export const ChatCard: React.FC<ChatCardProps> = ({
             style={[
               styles.subtitle,
               theme.typography.bodySm,
-              { color: theme.colors.textSecondary, fontSize: 12, lineHeight: 16 },
+              { color: theme.colors.textSecondary, fontSize: 12.5, lineHeight: 17, marginTop: 2 },
             ]}>
             {subtitle}
           </Text>
@@ -141,12 +130,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    padding: 12,
     borderWidth: 1,
   },
   avatarContainer: {
     position: 'relative',
-    marginRight: 10,
+    marginRight: 12,
   },
   avatarBgRing: {
     borderRadius: 24,
@@ -200,6 +189,19 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: 60,
     backgroundColor: '#FF4D4D',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
+    gap: 6,
+  },
+  actionIconButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },

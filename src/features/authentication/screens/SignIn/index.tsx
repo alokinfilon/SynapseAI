@@ -11,20 +11,24 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { EmailIcon, LeftArrowIcon, LockIcon } from '../../../../../assets/svg';
+import { EmailIcon, LockIcon } from '../../../../../assets';
 import {
+  AuthFooterLink,
+  AuthSuccessModal,
   Button,
   Checkbox,
+  ComingSoonModal,
   Divider,
   Input,
   RobotAvatar,
+  ScreenHeader,
   SocialTileRow,
 } from '../../../../shared/components';
 import { SIGN_IN_TEXTS } from './constants';
 import { styles } from './styles';
 import { useSignIn, UseSignInProps } from './useSignIn';
 
-export interface SignInScreenProps extends UseSignInProps {}
+export interface SignInScreenProps extends UseSignInProps { }
 
 export const SignInScreen: React.FC<SignInScreenProps> = (props) => {
   const {
@@ -35,10 +39,16 @@ export const SignInScreen: React.FC<SignInScreenProps> = (props) => {
     setPassword,
     rememberMe,
     setRememberMe,
+    showSuccessModal,
+    setShowSuccessModal,
+    showComingSoonModal,
+    setShowComingSoonModal,
+    confirmSignIn,
     onBack,
     handleSignInSubmit,
     onForgotPassword,
     onSignUpPress,
+    handleSocialLogin,
   } = useSignIn(props);
 
   return (
@@ -46,15 +56,11 @@ export const SignInScreen: React.FC<SignInScreenProps> = (props) => {
       <StatusBar barStyle={theme.isDarkMode ? 'light-content' : 'dark-content'} />
 
       {/* Top Header Navigation */}
-      <View style={styles.headerNav}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
-          <LeftArrowIcon size={24} color={theme.colors.textPrimary} />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader onBack={onBack} />
 
       <KeyboardAvoidingView
         style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <ScrollView
@@ -62,10 +68,10 @@ export const SignInScreen: React.FC<SignInScreenProps> = (props) => {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag">
-            
+
             {/* Bobo Robot Brand Hero */}
             <View style={styles.brandHero}>
-              <RobotAvatar size={105} expression="smile" showParticles={false} />
+              <RobotAvatar size={220} expression="normal" showParticles={false} />
             </View>
 
             {/* Heading */}
@@ -124,22 +130,32 @@ export const SignInScreen: React.FC<SignInScreenProps> = (props) => {
             {/* Social Sign In Option */}
             <Divider label={SIGN_IN_TEXTS.dividerLabel} style={styles.divider} />
 
-            <SocialTileRow style={styles.socialRow} />
+            <SocialTileRow style={styles.socialRow} onSelectProvider={handleSocialLogin} />
 
             {/* Footer Link */}
-            <View style={styles.footer}>
-              <Text style={[styles.footerText, theme.typography.bodyMd, { color: theme.colors.textSecondary }]}>
-                {SIGN_IN_TEXTS.noAccountPrompt}
-              </Text>
-              <TouchableOpacity onPress={onSignUpPress} activeOpacity={0.7}>
-                <Text style={[styles.signUpLink, theme.typography.headingSm, { color: theme.colors.primary }]}>
-                  {SIGN_IN_TEXTS.signUpLink}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <AuthFooterLink
+              promptText={SIGN_IN_TEXTS.noAccountPrompt}
+              linkText={SIGN_IN_TEXTS.signUpLink}
+              onPress={onSignUpPress}
+            />
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+
+      {/* Login Success Modal */}
+      <AuthSuccessModal
+        visible={showSuccessModal}
+        title="Congratulations!"
+        subtitle="Your account is ready to use. You will be redirected to the Home page in a few seconds."
+        onConfirm={confirmSignIn}
+        onClose={() => setShowSuccessModal(false)}
+      />
+
+      {/* Social Login Coming Soon Modal */}
+      <ComingSoonModal
+        visible={showComingSoonModal}
+        onClose={() => setShowComingSoonModal(false)}
+      />
     </SafeAreaView>
   );
 };

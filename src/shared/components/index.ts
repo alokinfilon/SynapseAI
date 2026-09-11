@@ -1,3 +1,4 @@
+export * from './Auth';
 export * from './Avatar';
 export * from './Button';
 export * from './Card';

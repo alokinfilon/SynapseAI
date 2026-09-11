@@ -1,13 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { useTheme } from '../../../hooks';
 import { fonts } from '../../../theme';
 
 export interface HeaderBarProps {
-  title: string;
+  /** Title text — omit if using leftComponent with its own title */
+  title?: string;
+  /** Single icon placed before the title */
   leftIcon?: React.ReactNode;
+  /** Full custom left section — overrides leftIcon + title */
   leftComponent?: React.ReactNode;
+  /** Array of action buttons rendered on the right */
   rightActions?: React.ReactNode;
+  /** Full custom right section — overrides rightActions */
   rightComponent?: React.ReactNode;
   style?: ViewStyle;
 }
@@ -21,29 +26,31 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   style,
 }) => {
   const theme = useTheme();
-  const left = leftComponent || leftIcon;
   const right = rightComponent || rightActions;
 
   return (
     <View
       style={[
         styles.container,
-        {
-          backgroundColor: theme.colors.canvas,
-          borderColor: theme.isDarkMode ? '#262A34' : '#F0F3F8',
-        },
+        { backgroundColor: theme.colors.canvas },
         style,
       ]}>
-      <View style={styles.leftSection}>
-        {left ? <View style={styles.leftIconWrapper}>{left}</View> : null}
-        <Text
-          style={[
-            styles.title,
-            { color: theme.colors.textPrimary, fontFamily: fonts.bold },
-          ]}>
-          {title}
-        </Text>
-      </View>
+      {leftComponent ? (
+        <View style={styles.leftSection}>{leftComponent}</View>
+      ) : (
+        <View style={styles.leftSection}>
+          {leftIcon ? <View style={styles.leftIconWrapper}>{leftIcon}</View> : null}
+          {title ? (
+            <Text
+              style={[
+                styles.title,
+                { color: theme.colors.textPrimary, fontFamily: fonts.bold },
+              ]}>
+              {title}
+            </Text>
+          ) : null}
+        </View>
+      )}
       {right ? <View style={styles.rightSection}>{right}</View> : null}
     </View>
   );
@@ -67,6 +74,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontWeight: '800',
   },
   rightSection: {
     flexDirection: 'row',

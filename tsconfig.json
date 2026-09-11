@@ -1,5 +1,10 @@
 {
   "extends": "@react-native/typescript-config",
-  "include": ["src/**/*", "index.js", "App.tsx"]
+  "compilerOptions": {
+    "paths": {
+      "@assets": ["./assets/index.js"],
+      "@assets/*": ["./assets/*"]
+    }
+  },
+  "include": ["src/**/*", "assets/**/*", "index.js", "App.tsx"]
 }
-

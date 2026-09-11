@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { AppleIcon, FacebookIcon, GoogleIcon } from '../../../../assets/svg';
 import { useTheme } from '../../../hooks';
 import { SocialProvider } from './SocialButton';
 
@@ -17,27 +18,15 @@ export const SocialTileRow: React.FC<SocialTileRowProps> = ({
   const providers: { type: SocialProvider; icon: React.ReactNode }[] = [
     {
       type: 'facebook',
-      icon: (
-        <View style={[styles.iconCircle, { backgroundColor: '#1877F2' }]}>
-          <Text style={styles.facebookLetter}>f</Text>
-        </View>
-      ),
+      icon: <FacebookIcon width={28} height={28} color="#1877F2" />,
     },
     {
       type: 'google',
-      icon: <Text style={styles.googleG}>G</Text>,
+      icon: <GoogleIcon width={28} height={28} />,
     },
     {
       type: 'apple',
-      icon: (
-        <Text
-          style={[
-            styles.appleLogo,
-            { color: theme.isDarkMode ? '#FFFFFF' : '#000000' },
-          ]}>
-          
-        </Text>
-      ),
+      icon: <AppleIcon width={28} height={28} color={theme.isDarkMode ? '#FFFFFF' : '#000000'} />,
     },
   ];
 
@@ -50,12 +39,12 @@ export const SocialTileRow: React.FC<SocialTileRowProps> = ({
             styles.tile,
             {
               backgroundColor: theme.isDarkMode ? '#1F222A' : '#FFFFFF',
-              borderColor: theme.isDarkMode ? '#35383F' : '#E8ECF4',
-              borderRadius: theme.radius.card,
+              borderColor: theme.isDarkMode ? '#262A35' : '#EEEEEE',
+              borderRadius: 16,
             },
           ]}
           onPress={() => onSelectProvider?.(p.type)}
-          activeOpacity={0.7}>
+          activeOpacity={0.75}>
           {p.icon}
         </TouchableOpacity>
       ))}
@@ -68,11 +57,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 20,
-    marginVertical: 12,
+    gap: 16,
+    marginVertical: 16,
   },
   tile: {
-    width: 76,
+    width: 86,
     height: 56,
     borderWidth: 1,
     alignItems: 'center',

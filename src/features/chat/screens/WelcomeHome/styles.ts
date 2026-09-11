@@ -1,62 +1,87 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { fonts } from '../../../../theme';
 
+const { width: SCREEN_W } = Dimensions.get('window');
+
 export const styles = StyleSheet.create({
+  /* ===== Root ===== */
   container: {
     flex: 1,
   },
-  headerAvatarWrapper: {
-    position: 'relative',
-  },
-  statusDot: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    borderWidth: 1.5,
-    borderColor: '#FFFFFF',
-  },
-  rightActionsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 12,
-    paddingBottom: 28,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  illustrationWrapper: {
+
+  /* ===== Header action buttons ===== */
+  actionIconBtn: {
+    width: 38,
+    height: 38,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 8,
   },
-  greetingTitle: {
-    fontSize: 22,
+
+  /* ===== Body ===== */
+  body: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 28,
+    paddingBottom: 40,
+  },
+
+  /* ===== Avatar Area ===== */
+  avatarArea: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  robotImage: {
+    width: 220,
+    height: 260,
+  },
+
+  /* ===== Text Area ===== */
+  textArea: {
+    alignItems: 'center',
+    marginBottom: 36,
+  },
+  greeting: {
+    fontSize: 26,
     fontFamily: fonts.bold,
-    marginTop: 20,
+    fontWeight: '700',
+    textAlign: 'center',
+    letterSpacing: -0.3,
+  },
+  tagline: {
+    fontSize: 18,
+    fontFamily: fonts.bold,
+    fontWeight: '700',
+    marginTop: 16,
     textAlign: 'center',
   },
-  greetingSubtitle: {
+  subtitle: {
     fontSize: 14,
     fontFamily: fonts.regular,
     marginTop: 8,
     textAlign: 'center',
+    lineHeight: 20,
   },
-  button: {
-    width: '100%',
+
+  /* ===== CTA Button ===== */
+  ctaButton: {
+    width: SCREEN_W - 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#00D2B4',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 14,
+    elevation: 6,
   },
-  actionTextEdit: {
-    fontFamily: fonts.semiBold,
+  ctaText: {
+    color: '#FFFFFF',
     fontSize: 16,
-  },
-  actionTextMore: {
     fontFamily: fonts.bold,
-    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
 });

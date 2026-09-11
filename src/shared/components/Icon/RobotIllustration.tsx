@@ -1,40 +1,168 @@
-import React from 'react';
-import { View } from 'react-native';
-import Svg, { Circle, G, Path, Rect } from 'react-native-svg';
-import { useTheme } from '../../../hooks';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Image, StyleSheet, View } from 'react-native';
+import LottieView from 'lottie-react-native';
+
+import { ANIMATIONS, IMAGES } from '../../../../assets';
 
 export interface RobotIllustrationProps {
   size?: number;
   bubbleColor?: string;
   style?: any;
+  autoPlay?: boolean;
+  loop?: boolean;
+  showBalls?: boolean;
+  animated?: boolean;
+  mode?: '3d' | 'waving' | 'lottie';
 }
 
 export const RobotIllustration: React.FC<RobotIllustrationProps> = ({
-  size = 200,
+  size = 260,
   style,
+  autoPlay = true,
+  loop = true,
+  showBalls = true,
+  animated = true,
+  mode = 'lottie',
 }) => {
-  const theme = useTheme();
-  const primaryTeal = theme.colors.primary || '#00D2B4';
+  const floatAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (!animated) return;
+
+    const anim = Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatAnim, {
+          toValue: 1,
+          duration: 2200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(floatAnim, {
+          toValue: 0,
+          duration: 2200,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    anim.start();
+    return () => anim.stop();
+  }, [floatAnim, animated]);
+
+  const translateY = floatAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [0, -10, 0],
+  });
+
+  const rotate = floatAnim.interpolate({
+    inputRange: [0, 0.25, 0.5, 0.75, 1],
+    outputRange: ['0deg', '-3.5deg', '0deg', '3.5deg', '0deg'],
+  });
+
+  const scale = floatAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [0.99, 1.03, 0.99],
+  });
+
+  const getImageSource = () => {
+    if (mode === 'waving') {
+      return IMAGES.robotWaving;
+    }
+    return IMAGES.robot3D;
+  };
 
   return (
     <View style={[{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }, style]}>
-      <Svg width={size} height={size} viewBox="0 0 200 200">
-        {/* Glow backdrop */}
-        <Circle cx="100" cy="100" r="80" fill={primaryTeal} opacity="0.1" />
-        {/* Robot Head */}
-        <Rect x="40" y="45" width="120" height="100" rx="30" fill="#FFFFFF" stroke={primaryTeal} strokeWidth="4" />
-        {/* Visor */}
-        <Rect x="52" y="60" width="96" height="68" rx="18" fill="#181A20" />
-        {/* Eyes */}
-        <Circle cx="76" cy="90" r="12" fill={primaryTeal} />
-        <Circle cx="79" cy="86" r="4" fill="#FFFFFF" />
-        <Circle cx="124" cy="90" r="12" fill={primaryTeal} />
-        <Circle cx="127" cy="86" r="4" fill="#FFFFFF" />
-        {/* Smile */}
-        <Path d="M 90 108 Q 100 118 110 108 Z" fill={primaryTeal} />
-      </Svg>
+      {mode === 'lottie' ? (
+        <LottieView
+          source={ANIMATIONS.robotAnimation}
+          autoPlay={animated && autoPlay}
+          loop={animated && loop}
+          style={{ width: size, height: size }}
+        />
+      ) : animated ? (
+        <Animated.Image
+          source={getImageSource()}
+          style={{
+            width: size,
+            height: size,
+            transform: [{ translateY }, { rotate }, { scale }],
+          }}
+          resizeMode="contain"
+        />
+      ) : (
+        <Image
+          source={getImageSource()}
+          style={{
+            width: size,
+            height: size,
+          }}
+          resizeMode="contain"
+        />
+      )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  ball: {
+    position: 'absolute',
+    borderRadius: 999,
+    zIndex: 2,
+  },
+  ball1: {
+    width: 18,
+    height: 18,
+    top: 25,
+    left: 40,
+    backgroundColor: '#00D2B4',
+    shadowColor: '#00D2B4',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  ball2: {
+    width: 26,
+    height: 26,
+    top: 15,
+    right: 35,
+    backgroundColor: '#24D897',
+    shadowColor: '#24D897',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  ball3: {
+    width: 14,
+    height: 14,
+    top: 115,
+    right: 25,
+    backgroundColor: '#00C8FF',
+  },
+  ball4: {
+    width: 22,
+    height: 22,
+    bottom: 30,
+    left: 45,
+    backgroundColor: '#10B981',
+    shadowColor: '#10B981',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  ball5: {
+    width: 20,
+    height: 20,
+    bottom: 35,
+    right: 45,
+    backgroundColor: '#00D2B4',
+    shadowColor: '#00D2B4',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+});
 
 export default RobotIllustration;

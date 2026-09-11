@@ -1,12 +1,14 @@
 import React from 'react';
 import {
-  SafeAreaView,
+  Image,
   StatusBar,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Button, HeaderBar, RobotAvatar, RobotIllustration } from '../../../../shared/components';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { GraphUpIcon, IMAGES, SettingIcon } from '../../../../../assets';
+import { ComingSoonModal, HeaderBar, RobotAvatar } from '../../../../shared/components';
 import { WELCOME_HOME_TEXTS } from './constants';
 import { styles } from './styles';
 import { useWelcomeHome, UseWelcomeHomeProps } from './useWelcomeHome';
@@ -17,50 +19,72 @@ export const WelcomeHomeScreen: React.FC<WelcomeHomeScreenProps> = (props) => {
   const {
     theme,
     userName,
-    isOnline,
     onNewChat,
     onCustomizeRobot,
     onOpenMenu,
+    comingSoonModalVisible,
+    comingSoonTitle,
+    comingSoonSubtitle,
+    onCloseComingSoonModal,
   } = useWelcomeHome(props);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={theme.isDarkMode ? 'light-content' : 'dark-content'} />
+
+      {/* Shared Header */}
       <HeaderBar
-        leftComponent={
-          <View style={styles.headerAvatarWrapper}>
-            <RobotAvatar size={36} />
-            {isOnline && <View style={[styles.statusDot, { backgroundColor: theme.colors.statusOnline }]} />}
-          </View>
-        }
-        title={`${WELCOME_HOME_TEXTS.greetingPrefix}${userName}${WELCOME_HOME_TEXTS.greetingSuffix}`}
-        rightComponent={
-          <View style={styles.rightActionsRow}>
-            <TouchableOpacity onPress={onCustomizeRobot}>
-              <Text style={[styles.actionTextEdit, { color: theme.colors.textPrimary }]}>
-                {WELCOME_HOME_TEXTS.editAction}
-              </Text>
+        title={WELCOME_HOME_TEXTS.brandName}
+        leftIcon={<RobotAvatar size={46} expression="normal" showParticles={false} />}
+        rightActions={
+          <>
+            <TouchableOpacity onPress={onCustomizeRobot} style={styles.actionIconBtn} activeOpacity={0.7}>
+              <GraphUpIcon size={22} color={theme.colors.textPrimary} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onOpenMenu}>
-              <Text style={[styles.actionTextMore, { color: theme.colors.textPrimary }]}>
-                {WELCOME_HOME_TEXTS.moreAction}
-              </Text>
+            <TouchableOpacity onPress={onOpenMenu} style={styles.actionIconBtn} activeOpacity={0.7}>
+              <SettingIcon size={22} color={theme.colors.textPrimary} />
             </TouchableOpacity>
-          </View>
+          </>
         }
       />
-      <View style={styles.content}>
-        <View style={styles.illustrationWrapper}>
-          <RobotIllustration size={220} />
-          <Text style={[styles.greetingTitle, { color: theme.colors.textPrimary }]}>
-            {WELCOME_HOME_TEXTS.questionTitle}
+
+      {/* Main Content — vertically centered */}
+      <View style={styles.body}>
+        {/* Full body waving robot */}
+        <View style={styles.avatarArea}>
+          <Image source={IMAGES.robotWaving} style={styles.robotImage} resizeMode="contain" />
+        </View>
+
+        {/* Text */}
+        <View style={styles.textArea}>
+          <Text style={[styles.greeting, { color: theme.colors.textPrimary }]}>
+            {WELCOME_HOME_TEXTS.welcomePrefix}{userName}{WELCOME_HOME_TEXTS.welcomeSuffix}
           </Text>
-          <Text style={[styles.greetingSubtitle, { color: theme.colors.textSecondary }]}>
+          <Text style={[styles.tagline, { color: theme.colors.textPrimary }]}>
+            {WELCOME_HOME_TEXTS.funHeading}
+          </Text>
+          <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
             {WELCOME_HOME_TEXTS.questionSubtitle}
           </Text>
         </View>
-        <Button title={WELCOME_HOME_TEXTS.startButton} onPress={onNewChat} style={styles.button} />
+
+        {/* CTA */}
+        <TouchableOpacity
+          style={[styles.ctaButton, { backgroundColor: theme.colors.primary }]}
+          onPress={onNewChat}
+          activeOpacity={0.85}
+        >
+          <Text style={styles.ctaText}>{WELCOME_HOME_TEXTS.startButton}</Text>
+        </TouchableOpacity>
       </View>
+
+      {/* Coming Soon Modal for Settings / Trends */}
+      <ComingSoonModal
+        visible={comingSoonModalVisible}
+        onClose={onCloseComingSoonModal}
+        title={comingSoonTitle}
+        subtitle={comingSoonSubtitle}
+      />
     </SafeAreaView>
   );
 };

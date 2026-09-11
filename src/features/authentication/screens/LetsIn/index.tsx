@@ -1,8 +1,8 @@
 import React from 'react';
 import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LeftArrowIcon } from '../../../../../assets/svg';
-import { Button, Divider, RobotIllustration, SocialButton } from '../../../../shared/components';
+import { LeftArrowIcon } from '../../../../../assets';
+import { Button, ComingSoonModal, Divider, RobotIllustration, ScreenHeader, SocialButton } from '../../../../shared/components';
 import { LETS_IN_TEXTS } from './constants';
 import { styles } from './styles';
 import { useLetsIn, UseLetsInProps } from './useLetsIn';
@@ -12,6 +12,8 @@ export interface LetsInScreenProps extends UseLetsInProps {}
 export const LetsInScreen: React.FC<LetsInScreenProps> = (props) => {
   const {
     theme,
+    showComingSoonModal,
+    setShowComingSoonModal,
     handleFacebookLogin,
     handleGoogleLogin,
     handleAppleLogin,
@@ -25,11 +27,7 @@ export const LetsInScreen: React.FC<LetsInScreenProps> = (props) => {
       <StatusBar barStyle={theme.isDarkMode ? 'light-content' : 'dark-content'} />
 
       {/* Top Header Navigation */}
-      <View style={styles.headerNav}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
-          <LeftArrowIcon size={24} color={theme.colors.textPrimary} />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader onBack={onBack} />
 
       <View style={styles.content}>
         {/* Bobo AI Robot Illustration */}
@@ -86,6 +84,12 @@ export const LetsInScreen: React.FC<LetsInScreenProps> = (props) => {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Social Login Coming Soon Modal */}
+      <ComingSoonModal
+        visible={showComingSoonModal}
+        onClose={() => setShowComingSoonModal(false)}
+      />
     </SafeAreaView>
   );
 };

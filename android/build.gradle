@@ -19,3 +19,24 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+// Patch @react-native-voice/voice which uses the defunct jcenter() and
+// is missing compileSdk — both break modern Android Gradle Plugin builds.
+subprojects { subproject ->
+    if (subproject.name == "react-native-voice_voice") {
+        subproject.configurations.all {}
+        subproject.afterEvaluate {
+            // Replace jcenter() with mavenCentral() in all repository handlers
+            subproject.repositories {
+                maven { url "https://maven.google.com" }
+                mavenCentral()
+            }
+            // Inject compileSdk if missing
+            if (subproject.hasProperty("android")) {
+                subproject.android {
+                    compileSdk rootProject.ext.compileSdkVersion
+                }
+            }
+        }
+    }
+}

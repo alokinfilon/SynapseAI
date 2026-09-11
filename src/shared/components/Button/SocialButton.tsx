@@ -7,6 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import { AppleIcon, FacebookIcon, GoogleIcon } from '../../../../assets/svg';
 import { useTheme } from '../../../hooks';
 
 export type SocialProvider = 'facebook' | 'google' | 'apple';
@@ -29,27 +30,11 @@ export const SocialButton: React.FC<SocialButtonProps> = ({
   const renderIcon = () => {
     switch (provider) {
       case 'facebook':
-        return (
-          <View style={[styles.iconCircle, { backgroundColor: '#1877F2' }]}>
-            <Text style={styles.facebookLetter}>f</Text>
-          </View>
-        );
+        return <FacebookIcon width={24} height={24} color="#1877F2" />;
       case 'google':
-        return (
-          <View style={styles.googleContainer}>
-            <Text style={styles.googleG}>G</Text>
-          </View>
-        );
+        return <GoogleIcon width={24} height={24} />;
       case 'apple':
-        return (
-          <Text
-            style={[
-              styles.appleLogo,
-              { color: theme.isDarkMode ? '#FFFFFF' : '#000000' },
-            ]}>
-            
-          </Text>
-        );
+        return <AppleIcon width={24} height={24} color={theme.isDarkMode ? '#FFFFFF' : '#000000'} />;
       default:
         return null;
     }
@@ -61,13 +46,13 @@ export const SocialButton: React.FC<SocialButtonProps> = ({
         styles.container,
         {
           backgroundColor: theme.isDarkMode ? '#1F222A' : '#FFFFFF',
-          borderColor: theme.isDarkMode ? '#35383F' : '#E8ECF4',
-          borderRadius: theme.radius.card,
+          borderColor: theme.isDarkMode ? '#262A35' : '#EEEEEE',
+          borderRadius: 16,
         },
         style,
       ]}
       onPress={onPress}
-      activeOpacity={0.8}
+      activeOpacity={0.75}
       {...rest}>
       <View style={styles.iconWrapper}>{renderIcon()}</View>
       <Text

@@ -1,7 +1,9 @@
 export const SIGN_UP_TEXTS = {
-  title: 'Create your\nAccount',
+  title: 'Create Account',
+  fullNamePlaceholder: 'Full Name',
   emailPlaceholder: 'Email',
   passwordPlaceholder: 'Password',
+  confirmPasswordPlaceholder: 'Confirm Password',
   rememberMeLabel: 'Remember me',
   signUpButton: 'Sign up',
   dividerLabel: 'or continue with',

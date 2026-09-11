@@ -1,6 +1,7 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { Button, NumericKeypad, OTPInput } from '../../../../shared/components';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button, NumericKeypad, OTPInput, ScreenHeader } from '../../../../shared/components';
 import { OTP_TEXTS } from './constants';
 import { styles } from './styles';
 import { useOTPVerification, UseOTPVerificationProps } from './useOTPVerification';
@@ -15,24 +16,21 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = (prop
     seconds,
     handleKeyPress,
     handleDelete,
+    handleAutoFill,
     handleResendPress,
     handleVerifySubmit,
     onBack,
   } = useOTPVerification(props);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
+    <SafeAreaView edges={['top', 'bottom']} style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
       <StatusBar barStyle={theme.isDarkMode ? 'light-content' : 'dark-content'} />
 
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
-          <Text style={[styles.backArrow, { color: theme.colors.textPrimary }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, theme.typography.displayLg, { color: theme.colors.textPrimary }]}>
-          {OTP_TEXTS.headerTitle}
-        </Text>
-      </View>
+      <ScreenHeader
+        title={OTP_TEXTS.headerTitle}
+        onBack={onBack}
+      />
 
       <View style={styles.content}>
         {/* Subtitle Contact Message */}
@@ -63,6 +61,24 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = (prop
 
         {/* Verify CTA Button */}
         <View style={styles.buttonWrapper}>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderRadius: 20,
+              backgroundColor: theme.isDarkMode ? '#1F2937' : '#E6FFFA',
+              marginBottom: 12,
+              alignSelf: 'center',
+              borderWidth: 1,
+              borderColor: theme.colors.primary,
+            }}
+            onPress={handleAutoFill}
+            activeOpacity={0.8}>
+            <Text style={{ fontSize: 13, fontWeight: '700', color: theme.colors.primary }}>
+              ⚡ Auto-fill OTP Code (5521)
+            </Text>
+          </TouchableOpacity>
+
           <Button
             title={OTP_TEXTS.verifyButton}
             onPress={handleVerifySubmit}

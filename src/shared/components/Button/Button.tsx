@@ -99,19 +99,21 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    height: 54,
+    height: 56,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
-    shadowColor: '#00D2B4',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 4,
+    shadowColor: '#10D0A7',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 5,
   },
   text: {
-    fontWeight: '600',
+    fontWeight: '700',
+    fontSize: 16,
+    letterSpacing: 0.2,
   },
 });
 

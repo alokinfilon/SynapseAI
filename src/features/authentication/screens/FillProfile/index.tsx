@@ -11,8 +11,8 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LeftArrowIcon, MessageIcon } from '../../../../../assets/svg';
-import { AvatarPicker, Button, Input } from '../../../../shared/components';
+import { MessageIcon } from '../../../../../assets';
+import { AvatarPicker, Button, Input, ScreenHeader } from '../../../../shared/components';
 import { FILL_PROFILE_TEXTS } from './constants';
 import { styles } from './styles';
 import { useFillProfile, UseFillProfileProps } from './useFillProfile';
@@ -44,14 +44,10 @@ export const FillProfileScreen: React.FC<FillProfileScreenProps> = (props) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
             {/* Header */}
-            <View style={styles.header}>
-              <TouchableOpacity onPress={onBack} style={styles.backButton}>
-                <LeftArrowIcon width={24} height={24} color={theme.colors.textPrimary} />
-              </TouchableOpacity>
-              <Text style={[styles.headerTitle, { color: theme.colors.textPrimary }]}>
-                {FILL_PROFILE_TEXTS.headerTitle}
-              </Text>
-            </View>
+            <ScreenHeader
+              title={FILL_PROFILE_TEXTS.headerTitle}
+              onBack={onBack}
+            />
 
             <ScrollView contentContainerStyle={styles.scrollContent}>
               <View style={styles.avatarWrapper}>

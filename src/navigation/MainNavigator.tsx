@@ -7,7 +7,6 @@ import {
   EndedChatsScreen,
   WelcomeHomeScreen,
 } from '../features/chat/screens';
-import { RobotCustomizerScreen } from '../features/preview/screens';
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
@@ -24,7 +23,6 @@ export const MainNavigator: React.FC = () => {
       <Stack.Screen name="ChatListHome" component={ChatListHomeScreen} />
       <Stack.Screen name="ActiveChat" component={ActiveChatScreen} />
       <Stack.Screen name="EndedChats" component={EndedChatsScreen} />
-      <Stack.Screen name="RobotCustomizer" component={RobotCustomizerScreen} />
     </Stack.Navigator>
   );
 };

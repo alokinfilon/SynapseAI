@@ -2,14 +2,15 @@ import React from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Button, Checkbox, Input, RobotIllustration } from '../../../../shared/components';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LockIcon } from '../../../../../assets';
+import { Button, Checkbox, Input, RobotIllustration, ScreenHeader } from '../../../../shared/components';
 import { CREATE_PASSWORD_TEXTS } from './constants';
 import { styles } from './styles';
 import { useCreateNewPassword, UseCreateNewPasswordProps } from './useCreateNewPassword';
@@ -30,18 +31,14 @@ export const CreateNewPasswordScreen: React.FC<CreateNewPasswordScreenProps> = (
   } = useCreateNewPassword(props);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
+    <SafeAreaView edges={['top', 'bottom']} style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
       <StatusBar barStyle={theme.isDarkMode ? 'light-content' : 'dark-content'} />
 
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
-          <Text style={[styles.backArrow, { color: theme.colors.textPrimary }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, theme.typography.displayLg, { color: theme.colors.textPrimary }]}>
-          {CREATE_PASSWORD_TEXTS.headerTitle}
-        </Text>
-      </View>
+      <ScreenHeader
+        title={CREATE_PASSWORD_TEXTS.headerTitle}
+        onBack={onBack}
+      />
 
       <KeyboardAvoidingView
         style={styles.flex}
@@ -69,7 +66,7 @@ export const CreateNewPasswordScreen: React.FC<CreateNewPasswordScreenProps> = (
               onChangeText={setPassword}
               isPassword
               leftIcon={
-                <Text style={[styles.inputIcon, { color: theme.colors.textMuted }]}>🔒</Text>
+                <LockIcon size={20} color={theme.colors.textMuted} />
               }
             />
 
@@ -79,7 +76,7 @@ export const CreateNewPasswordScreen: React.FC<CreateNewPasswordScreenProps> = (
               onChangeText={setConfirmPassword}
               isPassword
               leftIcon={
-                <Text style={[styles.inputIcon, { color: theme.colors.textMuted }]}>🔒</Text>
+                <LockIcon size={20} color={theme.colors.textMuted} />
               }
             />
 

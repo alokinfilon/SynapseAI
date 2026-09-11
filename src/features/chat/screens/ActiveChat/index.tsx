@@ -1,28 +1,38 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
+  Keyboard,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   ScrollView,
   StatusBar,
   Text,
-  TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LeftArrowIcon, MoreIcon, SearchIcon } from '../../../../../assets/svg';
+import {
+  DeleteIcon,
+  ExportIcon,
+  LeftArrowIcon,
+  MessageIcon,
+  MoreIcon,
+  PenIcon,
+} from '../../../../../assets';
 import {
   ChatInputBar,
   ChatMessageBubble,
   ConfirmationModal,
   DropdownMenu,
+  HeaderBar,
   RobotAvatar,
-  RobotIllustration,
-  RobotLoader,
 } from '../../../../shared/components';
-import { ACTIVE_CHAT_TEXTS, CHAT_SUGGESTIONS } from './constants';
+import { ACTIVE_CHAT_TEXTS } from './constants';
 import { styles } from './styles';
 import { useActiveChat, UseActiveChatProps } from './useActiveChat';
+import NewChatEmptyState, { ThreeDotsLoader } from './components/NewChatEmptyState';
+import MessageContextBanner from './components/MessageContextBanner';
 
 export interface ActiveChatScreenProps extends UseActiveChatProps {}
 
@@ -36,81 +46,79 @@ export const ActiveChatScreen: React.FC<ActiveChatScreenProps> = (props) => {
     showEndModal,
     setShowEndModal,
     isThinking,
-    showSearch,
-    setShowSearch,
-    searchQuery,
-    setSearchQuery,
     menuItems,
+    editingMessage,
+    setEditingMessage,
+    replyingMessage,
+    setReplyingMessage,
+    inputText,
+    setInputText,
+    handleDeleteById,
+    handleEditById,
+    handleReplyById,
+    handleRetryById,
     handleSendMessage,
+    handleSendImage,
     onBack,
     onEndSessionConfirm,
   } = useActiveChat(props);
 
+  const scrollViewRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (messages.length > 0 || isThinking) {
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [messages.length, isThinking]);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => {
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        }, 80);
+      }
+    );
+    return () => {
+      showSub.remove();
+    };
+  }, []);
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
+    <SafeAreaView edges={['top', 'left', 'right']} style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
       <StatusBar barStyle={theme.isDarkMode ? 'light-content' : 'dark-content'} />
 
-      {/* Top Header Navigation */}
-      <View style={styles.headerNav}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
-            <LeftArrowIcon size={24} color={theme.colors.textPrimary} />
-          </TouchableOpacity>
-          <View style={styles.avatarHeaderWrapper}>
-            <RobotAvatar size={36} expression="smile" />
-            <View style={[styles.onlineStatusDot, { backgroundColor: theme.colors.statusOnline }]} />
-          </View>
-          <View style={styles.headerTitleColumn}>
-            <Text style={[styles.headerTitle, theme.typography.headingSm, { color: theme.colors.textPrimary }]}>
-              {ACTIVE_CHAT_TEXTS.botName}
-            </Text>
-            <Text style={[styles.headerSubtitle, { color: theme.colors.primary }]}>
-              {ACTIVE_CHAT_TEXTS.botSubtitle}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.headerRight}>
-          <TouchableOpacity onPress={() => setShowSearch(!showSearch)} activeOpacity={0.7}>
-            <SearchIcon
-              size={22}
-              color={showSearch ? theme.colors.primary : theme.colors.textPrimary}
-            />
-          </TouchableOpacity>
+      {/* Header */}
+      <HeaderBar
+        leftComponent={
+          <>
+            <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
+              <LeftArrowIcon size={24} color={theme.colors.textPrimary} />
+            </TouchableOpacity>
+            <View style={styles.avatarHeaderWrapper}>
+              <RobotAvatar size={46} expression="normal" />
+              <View style={[styles.onlineStatusDot, { backgroundColor: theme.colors.statusOnline }]} />
+            </View>
+            <View style={styles.headerTitleColumn}>
+              <Text style={[styles.headerTitle, { color: theme.colors.textPrimary }]}>
+                {ACTIVE_CHAT_TEXTS.botName}
+              </Text>
+            </View>
+          </>
+        }
+        rightActions={
           <TouchableOpacity onPress={() => setShowMenu(!showMenu)} activeOpacity={0.7}>
-            <MoreIcon size={22} color={theme.colors.textPrimary} />
+            <MoreIcon size={26} color={theme.colors.textPrimary} />
           </TouchableOpacity>
-        </View>
-      </View>
+        }
+        style={{ zIndex: 10 }}
+      />
 
-      {/* Toggleable Search Bar */}
-      {showSearch ? (
-        <View style={styles.searchBarContainer}>
-          <View
-            style={[
-              styles.searchBar,
-              {
-                backgroundColor: theme.isDarkMode ? '#1F222A' : '#F1F5F9',
-                borderColor: theme.isDarkMode ? '#35383F' : '#E2E8F0',
-              },
-            ]}>
-            <SearchIcon size={18} color={theme.colors.textMuted} />
-            <TextInput
-              style={[styles.searchInput, theme.typography.bodyMd, { color: theme.colors.textPrimary }]}
-              placeholder={ACTIVE_CHAT_TEXTS.searchPlaceholder}
-              placeholderTextColor={theme.colors.textMuted}
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              autoFocus
-            />
-          </View>
-        </View>
-      ) : null}
-
-      {/* Dropdown Menu Popup */}
       <DropdownMenu visible={showMenu} items={menuItems} onClose={() => setShowMenu(false)} />
 
-      {/* End Session Confirmation Modal */}
       <ConfirmationModal
         visible={showEndModal}
         title={ACTIVE_CHAT_TEXTS.endModalTitle}
@@ -127,47 +135,79 @@ export const ActiveChatScreen: React.FC<ActiveChatScreenProps> = (props) => {
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 20}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled">
-          {/* Top Bobo AI Robot Hero Illustration */}
-          <View style={styles.illustrationWrapper}>
-            <RobotIllustration size={130} />
-          </View>
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
+        <View style={styles.flex}>
+          <ScrollView
+            ref={scrollViewRef}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled">
 
-          {/* Chat Messages */}
-          <View style={styles.messagesContainer}>
-            {filteredMessages.map((msg) => (
-              <ChatMessageBubble
-                key={msg.id}
-                id={msg.id}
-                sender={msg.sender}
-                text={msg.text}
-                time={msg.time}
-              />
-            ))}
+            {messages.length === 0 ? (
+              /* New Chat Empty State */
+              <NewChatEmptyState onTopicPress={handleSendMessage} />
+            ) : (
+              /* Active Messages List */
+              <View style={styles.messagesContainer}>
+                {filteredMessages.map((msg, index) => (
+                  <ChatMessageBubble
+                    key={msg.id}
+                    id={msg.id}
+                    sender={msg.sender}
+                    text={msg.text}
+                    imageUrl={msg.imageUrl}
+                    images={msg.images}
+                    time={msg.time}
+                    isLatest={index === filteredMessages.length - 1}
+                    onEdit={handleEditById}
+                    onReply={handleReplyById}
+                    onRetry={handleRetryById}
+                    onDelete={handleDeleteById}
+                  />
+                ))}
 
-            {/* AI Response Loading Typing Indicator */}
-            {isThinking ? (
-              <View style={styles.loaderContainer}>
-                <RobotLoader size={36} mode="typing" expression="thinking" />
-                <Text style={[styles.thinkingText, { color: theme.colors.textMuted }]}>
-                  {ACTIVE_CHAT_TEXTS.typingText}
-                </Text>
+                {/* AI Thinking Indicator */}
+                {isThinking ? (
+                  <View style={styles.typingBubbleRow}>
+                    <RobotAvatar size={46} expression="smile" showParticles={false} />
+                    <View
+                      style={[
+                        styles.typingBubble,
+                        {
+                          backgroundColor: theme.isDarkMode ? '#1F222A' : '#F1F5F9',
+                          borderColor: theme.isDarkMode ? '#35383F' : '#E2E8F0',
+                        },
+                      ]}>
+                      <ThreeDotsLoader color={theme.colors.primary} />
+                    </View>
+                  </View>
+                ) : null}
               </View>
-            ) : null}
-          </View>
-        </ScrollView>
+            )}
+          </ScrollView>
 
-        {/* Bottom Input Bar with Suggestions */}
-        <ChatInputBar
-          onSend={handleSendMessage}
-          suggestions={messages.length < 7 ? CHAT_SUGGESTIONS : undefined}
-          onSelectSuggestion={handleSendMessage}
-        />
+          {/* Editing / Replying Context Banner */}
+          <MessageContextBanner
+            editingMessage={editingMessage}
+            replyingMessage={replyingMessage}
+            onCancelEdit={() => {
+              setEditingMessage(null);
+              setInputText('');
+            }}
+            onCancelReply={() => setReplyingMessage(null)}
+          />
+
+          {/* Chat Input Bar */}
+          <ChatInputBar
+            value={inputText || undefined}
+            onChangeText={setInputText}
+            onSend={handleSendMessage}
+            onSendImage={handleSendImage}
+            onSelectSuggestion={handleSendMessage}
+          />
+        </View>
       </KeyboardAvoidingView>
+
     </SafeAreaView>
   );
 };

@@ -9,7 +9,8 @@ export interface Splash1ScreenProps {
   style?: any;
 }
 
-export const useSplash1 = ({ onFinishLoading }: Splash1ScreenProps) => {
+export const useSplash1 = (props: Splash1ScreenProps) => {
+  const { onFinish, onFinishLoading } = props;
   const theme = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -20,13 +21,14 @@ export const useSplash1 = ({ onFinishLoading }: Splash1ScreenProps) => {
       useNativeDriver: true,
     }).start();
 
-    if (onFinishLoading) {
+    const callback = onFinish || onFinishLoading;
+    if (callback) {
       const timer = setTimeout(() => {
-        onFinishLoading();
+        callback();
       }, LOADING_TIMEOUT);
       return () => clearTimeout(timer);
     }
-  }, [fadeAnim, onFinishLoading]);
+  }, [fadeAnim, onFinish, onFinishLoading]);
 
   return {
     theme,
